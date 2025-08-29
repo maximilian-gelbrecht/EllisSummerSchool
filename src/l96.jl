@@ -45,7 +45,7 @@ end
 
 function (model::TwoLayerLorenz96)(du, u, p, t)
     (; K, J, N) = model
-    (h, c, b, F) = p # forcing parameter
+    (h, c, b, F) = p 
     hcb = h*c/b
 
     X = view(u, 1:K)
@@ -61,6 +61,18 @@ function (model::TwoLayerLorenz96)(du, u, p, t)
 end
 
 default_parameters() = (h=1., c=10., b=10., F=12.)
+
+"""
+$SIGNATURES
+
+Subgrid saving function for use with `SavingCallback`.
+"""
+function subgrid_save_func(u, t, integrator) 
+    (h, c, b, F) = integrator.p
+    hcb = h*c/b
+    Y = view(u, (K+1):N)
+    return (hcb .* vec(sum(reshape(Y, J, K), dims=1)))
+end 
 
 # some utilities for plotting 
 layer1_θ(model::TwoLayerLorenz96) = range(start=0, step=2π/model.K, length=model.K)
