@@ -1,14 +1,5 @@
 """
 $SIGNATURES
-Vectorized Lorenz96 equation without forcing term for one layer.
-```math
-\\frac{du}{dt} = (c*b) (u[j+1] - u[j-2]) * u[j-1] - c*u[j]
-```
-"""
-lorenz69_layer(u; c::Number=1, b::Number=1) = (c*b) .* (circshift(u, -1) .- circshift(u, 2)) .* circshift(u, 1) .- c.* u
-
-"""
-$SIGNATURES
 
 Basic one layer Lorenz96 model.
 
