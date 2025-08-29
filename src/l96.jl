@@ -61,14 +61,14 @@ function (model::TwoLayerLorenz96)(du, u, p, t)
 end
 
 default_parameters() = (h=1., c=10., b=10., F=12.)
+default_initial_condition(model::TwoLayerLorenz96) = [0.5 * sin.(2π * 3*(0:model.K-1) / model.K); 0.01 * randn(model.N_J)]
 
 """
-$SIGNATURES
-
 Subgrid saving function for use with `SavingCallback`.
 """
 function subgrid_save_func(u, t, integrator) 
     (h, c, b, F) = integrator.p
+    (; K, J, N) = SciMLBase.unwrapped_f(integrator.f.f)
     hcb = h*c/b
     Y = view(u, (K+1):N)
     return (hcb .* vec(sum(reshape(Y, J, K), dims=1)))
@@ -116,23 +116,20 @@ function animate_polar_plot(model::TwoLayerLorenz96, sol;
     θ_fast = layer2_θ(model)
 
     # Observables for data at current time
-    slow_data = @lift sol_data[1:model.K, $itime]
-    fast_data = @lift sol_data[(model.K+1):end, $itime]
+    slow_data = @lift [sol_data[1:model.K, $itime]; sol_data[1, $itime]] # add the first point again to close the circle 
+    fast_data = @lift [sol_data[(model.K+1):end, $itime]; sol_data[(model.K+1), $itime]]
 
     # Plot both layers with different colors and styles
-    lines!(ax, θ_slow, slow_data, 
+    lines!(ax, [θ_slow; θ_slow[1]], slow_data, 
         color = :blue,
         linewidth = 3,
         label = "Slow Variables (X)")
 
-    lines!(ax, θ_fast, fast_data, 
+    lines!(ax, [θ_fast; θ_fast[1]], fast_data, 
         color = :red, 
         linewidth = 1.5, 
         alpha = 0.7,
         label = "Fast Variables (Y)")
-
-    # Add legend
-    axislegend(ax, position = :rt)
 
     # Create animation
     record(fig, filename, 1:length(sol.t), framerate=framerate) do t
