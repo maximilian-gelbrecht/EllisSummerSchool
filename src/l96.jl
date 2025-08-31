@@ -62,6 +62,7 @@ default_parameters() = (h=1., c=10., b=10., F=12.)
 default_initial_condition(model::TwoLayerLorenz96) = [0.5 * sin.(2π * 3*(0:model.K-1) / model.K); 0.01 * randn(model.N_J)]
 
 """
+$SIGNATURES
 Subgrid saving function for use with `SavingCallback` from DiffEqCallbacks.jl
 """
 function subgrid_save_func(u, t, integrator) 
