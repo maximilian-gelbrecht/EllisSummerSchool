@@ -14,7 +14,7 @@
 end
 
 @testset "OneLayerLorenz96" begin
-    model = OneLayerLorenz96()
+    model = OneLayerLorenz96(K=36)
     p = default_parameters()
     u0 = default_initial_condition(model)
     tspan = (0., 5.)

@@ -8,6 +8,7 @@ Basic one layer Lorenz96 model.
 ```
 """
 struct OneLayerLorenz96 
+    K::Integer # number of grid points 
 end 
 
 function (model::OneLayerLorenz96)(du, u, p, t)
