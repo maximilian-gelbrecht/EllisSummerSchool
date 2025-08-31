@@ -17,6 +17,8 @@ function (model::OneLayerLorenz96)(du, u, p, t)
     du .= (circshift(u, -1) .- circshift(u, 2)) .* circshift(u, 1) .- u .+ F
 end
 
+default_initial_condition(model::OneLayerLorenz96) = 0.5 * sin.(2π * 3*(0:model.K-1) / model.K)
+
 """
 $SIGNATURES
 
