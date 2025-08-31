@@ -7,7 +7,7 @@
     tspan = (0., 5.)
     prob = ODEProblem(model, u0, tspan, p)
     sol = solve(prob, Tsit5(), saveat=0.005)
-    @test sol.retcode == :Success
+    @test sol.retcode == SciMLBase.ReturnCode.Success
     @test sol.u[end] != sol.u[1]         # something happended 
     @test all(isfinite.(sol.u[end]))   # no blow up for default config 
     @test (sum(abs.(sol.u[end])) .> 1) # no fixed point for the default config 
@@ -20,7 +20,7 @@ end
     tspan = (0., 5.)
     prob = ODEProblem(model, u0, tspan, p)
     sol = solve(prob, Tsit5(), saveat=0.005)
-    @test sol.retcode == :Success
+    @test sol.retcode == SciMLBase.ReturnCode.Success
     @test sol.u[end] != sol.u[1]         # something happended 
     @test all(isfinite.(sol.u[end]))   # no blow up for default config 
     @test (sum(abs.(sol.u[end])) .> 1) # no fixed point for the default config 
