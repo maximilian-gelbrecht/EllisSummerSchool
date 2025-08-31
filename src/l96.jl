@@ -6,8 +6,10 @@ Basic one layer Lorenz96 model.
 ```math
 \\frac{du_{j}}{dt} = (u_{j+1} - u_{j-2}) * u_{j-1} - u_{j} + F
 ```
+
+$TYPEDFIELDS
 """
-struct OneLayerLorenz96 
+@kwdef struct OneLayerLorenz96 
     K::Integer # number of grid points 
 end 
 
@@ -21,7 +23,7 @@ end
 default_initial_condition(model::OneLayerLorenz96) = 0.5 * sin.(2π * 3*(0:model.K-1) / model.K)
 
 """
-$SIGNATURES
+$TYPEDSIGNATURES
 
 Basic two layer Lorenz96 model with fast-slow coupling, K slow variables and J fast variables per slow variable.
 
@@ -29,6 +31,8 @@ Basic two layer Lorenz96 model with fast-slow coupling, K slow variables and J f
 \\frac{dX_{i}}{dt} = (X_{i+1} - X_{i-2}) * X_{i-1} - X_{i} + F - \\frac{hc}{b} \\sum_{j=1}^J Y_{i,j}
 \\frac{dY_{i,j}}{dt} = cb\\cdot (Y_{i,j+1} - Y_{i,j-2}) * Y_{i,j+1} - cY_{i,j} + (hc/b) X_{i}
 ```
+
+$(TYPEDFIELDS)
 """
 @kwdef struct TwoLayerLorenz96 
     K::Integer # 1st layer: number of grid points of the slow variable
